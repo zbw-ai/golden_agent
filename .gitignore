@@ -1,0 +1,18 @@
+# Python 虚拟环境
+.venv/
+__pycache__/
+*.pyc
+
+# 个人密钥配置（含 PushPlus token）——朋友复制 config.example.yaml 自己填
+config.yaml
+
+# 个人交易记录与价格/报告数据（隐私）
+records/trades.csv
+records/prices/
+records/reports/
+
+# 系统
+.DS_Store
+
+# Claude Code 本地配置（个人权限设置）
+.claude/

@@ -1,0 +1,42 @@
+# 复制为 config.yaml 后填写
+symbol: "融通金铂金"
+poll_interval_sec: 15
+cooldown_sec: 900
+
+# 微信通知（PushPlus）
+pushplus:
+  token: "YOUR_PUSHPLUS_TOKEN"
+  topic: ""
+
+# 点位配置（单位：元/克）
+levels:
+  buy_1_lte: 422
+  buy_2_lte: 412
+  breakout_gte: 428
+  take_profit_watch_gte: 435
+  take_profit_main_gte: 438
+
+# 数据源优先级（按顺序尝试）
+# 方案2：网页抓取（Playwright 渲染后读取“铂金销售价”）
+price_sources:
+  - name: "rtj_quoteh5_playwright"
+    enabled: true
+    type: "rtj_quoteh5_playwright"
+    url: "https://i.jzj9999.com/quoteh5/"
+    timeout_sec: 25
+
+  # 可选：如果你后续拿到 JSON 接口，可放在后备源
+  - name: "custom_json_api_backup"
+    enabled: false
+    type: "json_api"
+    url: "https://example.com/platinum/price"
+    method: "GET"
+    timeout_sec: 8
+    headers: {}
+    json_path: "data.price"
+
+# 如果你暂时没有可用 API，可先用 mock 进行联调
+mock_mode:
+  enabled: false
+  start_price: 426
+  volatility: 1.2
