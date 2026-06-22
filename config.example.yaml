@@ -1,23 +1,47 @@
-# 复制为 config.yaml 后填写
-symbol: "融通金铂金"
+# 复制为 config.yaml 后填写自己的 token 和点位
+# 全局轮询参数
 poll_interval_sec: 15
-cooldown_sec: 900
+cooldown_sec: 1200
 
-# 微信通知（PushPlus）
+# 微信通知（PushPlus）—— 去 https://www.pushplus.plus 申请 token
 pushplus:
   token: "YOUR_PUSHPLUS_TOKEN"
   topic: ""
 
-# 点位配置（单位：元/克）
-levels:
-  buy_1_lte: 422
-  buy_2_lte: 412
-  breakout_gte: 428
-  take_profit_watch_gte: 435
-  take_profit_main_gte: 438
+# 监控品种（多品种共享一个浏览器会话抓取）
+# levels 单位：元/克；下面是示意值，请按自己关注的点位修改
+symbols:
+  platinum:
+    display_name: "融通金铂金"
+    row_match: "铂 金"            # 页面表格里定位该行的文字
+    levels:
+      buy_1_lte: 360             # 跌破 → 买点/警报
+      buy_2_lte: 345             # 跌破 → 深度支撑/补仓评估
+      breakout_gte: 375          # 突破 → 反弹/转强信号
+      take_profit_watch_gte: 410 # 减仓位
+      take_profit_main_gte: 428  # 主减仓/解套位
 
-# 数据源优先级（按顺序尝试）
-# 方案2：网页抓取（Playwright 渲染后读取“铂金销售价”）
+  gold:
+    display_name: "融通金黄金"
+    row_match: "黄 金"
+    levels:
+      buy_1_lte: 905
+      buy_2_lte: 888
+      breakout_gte: 955
+      take_profit_watch_gte: 980
+      take_profit_main_gte: 1003
+
+  silver:
+    display_name: "融通金白银"
+    row_match: "白 银"
+    levels:
+      buy_1_lte: 15.0
+      buy_2_lte: 14.5
+      breakout_gte: 16.0
+      take_profit_watch_gte: 16.5
+      take_profit_main_gte: 17.0
+
+# 数据源（rtj_quoteh5_playwright 在一次浏览器会话内抓所有品种）
 price_sources:
   - name: "rtj_quoteh5_playwright"
     enabled: true
@@ -25,17 +49,18 @@ price_sources:
     url: "https://i.jzj9999.com/quoteh5/"
     timeout_sec: 25
 
-  # 可选：如果你后续拿到 JSON 接口，可放在后备源
-  - name: "custom_json_api_backup"
-    enabled: false
-    type: "json_api"
-    url: "https://example.com/platinum/price"
-    method: "GET"
-    timeout_sec: 8
-    headers: {}
-    json_path: "data.price"
+# 价格日志（每品种独立文件：{symbol}_YYYY-MM-DD.csv）
+price_log:
+  enabled: true
+  dir: "records/prices"
 
-# 如果你暂时没有可用 API，可先用 mock 进行联调
+# 每日自动分析报告（monitor 常驻进程到点触发，本地存档 + 推送 PushPlus）
+daily_report:
+  enabled: true
+  pre_time: "08:30"    # 盘前报告时间
+  post_time: "21:00"   # 收盘报告时间
+
+# 没有真实接口时可先开 mock 验证推送链路
 mock_mode:
   enabled: false
   start_price: 426
