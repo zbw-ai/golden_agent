@@ -19,16 +19,36 @@ python -m playwright install chromium
 
 ## 2. 配置
 
+仓库**只提供 `config.example.yaml` 模板，不含真实密钥**。你需要基于它创建自己的 `config.yaml`：
+
+### 第 1 步：复制出自己的配置文件
+
 ```bash
 cp config.example.yaml config.yaml
 ```
 
-编辑 `config.yaml`：
-1. 填写 `pushplus.token`（去 pushplus.plus 申请）
-2. 按需调整 `symbols` 下各品种的 `levels` 点位
-3. `daily_report` 可设盘前/收盘报告时间
+### 第 2 步：注册 PushPlus，获取 token
 
-> ⚠️ `config.yaml` 含个人密钥，已被 `.gitignore` 排除，不会上传。
+1. 打开 [https://www.pushplus.plus](https://www.pushplus.plus)，用微信扫码登录
+2. 登录后在首页「一对一推送」处即可看到你的 **token**（一串字符）
+3. 关注它的公众号，否则收不到推送
+
+### 第 3 步：把 token 填进 config.yaml
+
+编辑 `config.yaml`，把占位符换成你自己的 token：
+
+```yaml
+pushplus:
+  token: "这里填你在 PushPlus 拿到的 token"   # 替换掉 YOUR_PUSHPLUS_TOKEN
+  topic: ""                                  # 群组推送才需要，个人推送留空
+```
+
+### 第 4 步（可选）：调整点位和报告时间
+
+- `symbols` 下各品种的 `levels`：改成你自己关注的买卖点位（元/克）
+- `daily_report` 的 `pre_time` / `post_time`：盘前/收盘报告时间
+
+> ⚠️ `config.yaml` 含你的个人密钥，已被 `.gitignore` 排除，**不会被上传到 GitHub**。永远不要把真实 token 提交到仓库。
 
 ## 3. 运行
 
